@@ -1,21 +1,31 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Card } from 'react-bootstrap'
+import { connect, useDispatch } from 'react-redux'
+import { fetchPranks } from '../redux/store/actions/category'
 
-const CategoryCard = ({ header, color, pathName, data }) => {
+
+const CategoryCard = ({ category }) => {
+    const dispatch = useDispatch();
+
     return (
         <div style={{ padding: '2%' }}>
-            <Link to={{
-                pathname: `/category/${pathName}`,
+            <Link onClick={
+                () => { dispatch(fetchPranks(category.slug, 6, 1)) }
+
+            } to={{
+                pathname: `/category/${category.slug}`,
+                state: { slug: category.slug }
             }}>
                 <Card
-                    bg={color}
-                    text='white'
-                    style={{ width: '18rem' }}
-                    className="mb-2"
+                    bg='light'
+                    style={{ width: '11rem', height: '14rem' }}
+                    className="mb-4"
                 >
+                    <Card.Img src={category.img_url} variant="top" height="120rem" />
+
                     <Card.Body>
-                        <Card.Title>{header}</Card.Title>
+                        <Card.Title>{category.name}</Card.Title>
                     </Card.Body>
                 </Card>
             </Link>
@@ -24,6 +34,10 @@ const CategoryCard = ({ header, color, pathName, data }) => {
     )
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    fetchPranks: fetchPranks
+})
 
 
-export default CategoryCard
+
+export default connect(null, mapDispatchToProps)(CategoryCard)

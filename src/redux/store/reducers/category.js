@@ -12,8 +12,15 @@ const category = (state = initialState, action) => {
         case types.FETCH_CATEGORIES_REQUEST:
             return {
                 ...state,
+                pranks: [],
                 loading: true
 
+            }
+        case types.SEARCH_PRANKS_SUCCESS:
+            return {
+                ...state,
+                pranks: action.payload,
+                loading: false
             }
 
         case types.FETCH_CATEGORIES_FAILURE:

@@ -1,5 +1,5 @@
 import types from '../../types/category'
-import { getAllCategories, getCategoryPrank } from '../../services/category'
+import { getAllCategories, getCategoryPrank, getSearchedPranks } from '../../services/category'
 
 export const fetchCategoriesRequest = () => {
     return {
@@ -14,9 +14,16 @@ export const fetchCategoriesSuccess = (categories) => {
     }
 }
 
-export const fetchCategorieyPrank = (pranks) => {
+export const fetchCategoryPrank = (pranks) => {
     return {
         type: types.FETCH_PRANKS_SUCCESS,
+        payload: pranks
+    }
+}
+
+export const searchPrankFromPranks = (pranks) => {
+    return {
+        type: types.SEARCH_PRANKS_SUCCESS,
         payload: pranks
     }
 }
@@ -28,12 +35,12 @@ export const fetchCategoriesFailure = (error) => {
     }
 }
 
-export const fetchCategories = () => {
+export const fetchCategories = (categoriesPerPage, pageNumber) => {
     return dispatch => {
-        dispatch(fetchCategoriesRequest)
-        getAllCategories()
+        dispatch(fetchCategoriesRequest())
+        getAllCategories(categoriesPerPage, pageNumber)
             .then(response => {
-                const categories = response.data.result.categories
+                const categories = response.data.result
                 dispatch(fetchCategoriesSuccess(categories))
 
             })
@@ -45,14 +52,31 @@ export const fetchCategories = () => {
 
 }
 
-export const fetchPranks = (slug) => {
+export const fetchPranks = (slug, NumberOfPranks, pageNumber) => {
     return dispatch => {
-        dispatch(fetchCategoriesRequest)
-        console.log(slug)
-        getCategoryPrank(slug)
+
+        dispatch(fetchCategoriesRequest())
+        getCategoryPrank(slug, NumberOfPranks, pageNumber)
             .then(response => {
-                const category = response.data.result.categories
-                dispatch(fetchCategorieyPrank(category))
+                const category = response.data.result
+                dispatch(fetchCategoryPrank(category))
+
+            })
+            .catch(error => {
+                const errorMsg = error.message
+                dispatch(fetchCategoriesFailure(errorMsg))
+            })
+    }
+
+}
+
+export const searchPranks = (searchWord, slug, numberOfPranks, pageNumber) => {
+    return dispatch => {
+        getSearchedPranks(searchWord, slug, numberOfPranks, pageNumber)
+            .then(response => {
+                const pranks = response.data.result
+                console.log(pranks)
+                dispatch(searchPrankFromPranks(pranks))
 
             })
             .catch(error => {

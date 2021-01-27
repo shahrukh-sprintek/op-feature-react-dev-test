@@ -1,19 +1,28 @@
 import API from './api'
 
-export function getAllCategories() {
-    return API.get(`/api/get/categories/10/2`,
+export function getAllCategories(categoriesPerPage, pageNumber) {
+    return API.get(`/api/get/categories/${categoriesPerPage}/${pageNumber}`,
         {
             headers: {
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im93bmFnZSIsInBhc3N3b3JkIjoic2VjcmV0In0.ezlOpqFzxsqDMHKrlY-ET4cCJ8IWg9hRKq2g1Zw7z_M'
+                'Authorization': process.env.REACT_APP_HEADER_ACCESS_TOKEN
             }
         });
 }
 
-export function getCategoryPrank(slug) {
-    return API.get(`/api/get/category/pranks/slug/${slug}`,
+export function getCategoryPrank(slug, numberOfPranks, pageNumber) {
+    return API.get(`/api/get/category/pranks/${slug}/${numberOfPranks}/${pageNumber}`,
         {
             headers: {
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im93bmFnZSIsInBhc3N3b3JkIjoic2VjcmV0In0.ezlOpqFzxsqDMHKrlY-ET4cCJ8IWg9hRKq2g1Zw7z_M'
+                'Authorization': process.env.REACT_APP_HEADER_ACCESS_TOKEN
+            }
+        });
+}
+
+export function getSearchedPranks(word, slug, pranksPerPage, pageNumber) {
+    return API.get(`/api/get/category/pranks/${slug}/${word}/${pranksPerPage}/${pageNumber}`,
+        {
+            headers: {
+                'Authorization': process.env.REACT_APP_HEADER_ACCESS_TOKEN
             }
         });
 }
